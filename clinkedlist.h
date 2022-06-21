@@ -16,7 +16,9 @@ struct Node {
     struct Node* next;
 };
 
-int Node_create(struct Node** node, int data, struct Node* next)
+// description: creates a node with given value on the heap
+// time complexity: O(1)
+int Node_create(struct Node** node, int val, struct Node* next)
 {
     if (node==NULL) return NULL_POINTER;
 
@@ -24,11 +26,13 @@ int Node_create(struct Node** node, int data, struct Node* next)
 
     if (node==NULL) return BAD_ALLOCATION;
 
-    (*node)->data = data;
+    (*node)->data = val;
     (*node)->next = next;
     return EXIT_SUCCESS;
 }
 
+// description: releases heap memory of each node of the linked list
+// time complexity: O(n), where n is the size of the linked list
 void Node_free(struct Node** head)
 {
     struct Node* curr = *head;
@@ -43,7 +47,8 @@ void Node_free(struct Node** head)
     *head = NULL;
 }
 
-// time complexity: O(n)
+// description: prints out value of each node in the linked list
+// time complexity: O(n), where n is the size of the linked list
 void Node_display(struct Node* node)
 {
     struct Node* curr = node;
@@ -55,6 +60,8 @@ void Node_display(struct Node* node)
     printf("%d\n", curr->data);
 }
 
+// description: returns value of a node at given index
+// time complexity: O(n), where n is the size of the linked list
 int Node_get(struct Node* head, int idx, int* val)
 {
     if (idx<0) return INDEX_OUT_OF_BOUNDS;
@@ -73,7 +80,8 @@ int Node_get(struct Node* head, int idx, int* val)
     return INDEX_OUT_OF_BOUNDS;
 }
 
-// time complexity: O(n)
+// description: places a node with given value at the end of the linked list
+// time complexity: O(n), where n is the size of the linked list
 int Node_append(struct Node* head, int val)
 {
     if (head==NULL) return NULL_POINTER;
@@ -97,7 +105,8 @@ int Node_append(struct Node* head, int val)
     return EXIT_SUCCESS;
 }
 
-// time complexity: 0(n)
+// description: places new node with the value at given index
+// time complexity: 0(n), where n is the size of the linked list
 int Node_insert(struct Node** head, int idx, int val)
 {
     if (head==NULL) return NULL_POINTER;
@@ -142,7 +151,8 @@ int Node_insert(struct Node** head, int idx, int val)
     return INDEX_OUT_OF_BOUNDS;
 }
 
-// time complexity: O(n)
+// description: removes node at the given index from the linked list
+// time complexity: O(n), where n is the size of the linked list
 int Node_delete(struct Node** head, int idx)
 {
     if (idx<0) return INDEX_OUT_OF_BOUNDS;
@@ -179,7 +189,8 @@ int Node_delete(struct Node** head, int idx)
     return INDEX_OUT_OF_BOUNDS;
 }
 
-// time complexity: O(n)
+// description: returns true if the linked list contains given value, false otherwise
+// time complexity: O(n), where n is the size of the linked list
 int Node_contains(struct Node* head, int val, bool* contains)
 {
     if (head==NULL) return NULL_POINTER;
