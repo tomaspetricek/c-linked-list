@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "error.h"
 
@@ -141,6 +142,7 @@ int Node_insert(struct Node** head, int idx, int val)
     return INDEX_OUT_OF_BOUNDS;
 }
 
+// time complexity: O(n)
 int Node_delete(struct Node** head, int idx)
 {
     if (idx<0) return INDEX_OUT_OF_BOUNDS;
@@ -175,6 +177,25 @@ int Node_delete(struct Node** head, int idx)
     }
 
     return INDEX_OUT_OF_BOUNDS;
+}
+
+// time complexity: O(n)
+int Node_contains(struct Node* head, int val, bool* contains)
+{
+    if (head==NULL) return NULL_POINTER;
+
+    *contains = false;
+    struct Node* curr = head;
+
+    while (curr!=NULL) {
+        if (curr->data==val) {
+            *contains = true;
+            return EXIT_SUCCESS;
+        }
+        curr = curr->next;
+    }
+
+    return EXIT_SUCCESS;
 }
 
 #endif //CCODE_CLINKEDLIST_H

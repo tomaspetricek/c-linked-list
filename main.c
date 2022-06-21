@@ -54,12 +54,25 @@ int main()
     err = Node_get(head, idx, &val);
 
     if (!err) {
-        printf("Element at index %d is %d", idx, val);
+        printf("Element at index %d is %d\n", idx, val);
     }
     else {
         log_error("Cannot get element", err);
     }
 
+    // contains
+    bool contains;
+    val = 10;
+    err = Node_contains(head, 10, &contains);
+
+    if (!err) {
+        printf("List contains value %d: %d\n", val, contains);
+    }
+    else {
+        log_error("Cannot check if list contains value:", err);
+    }
+
+    // free
     Node_free(&head);
     return 0;
 }

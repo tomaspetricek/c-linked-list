@@ -11,6 +11,8 @@ stdio.h
 -
 stdlib.h
 -
+stdbool.h
+-
 error.h
 /Users/tomaspetricek/Programming/Languages/Cpp/courses/udemy/MasteringDataStructuresAndAlgorithms/LinkedList/CLinkedList/error.h
 
