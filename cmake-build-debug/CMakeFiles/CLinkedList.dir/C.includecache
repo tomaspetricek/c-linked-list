@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/tomaspetricek/Programming/Languages/Cpp/courses/udemy/MasteringDataStructuresAndAlgorithms/LinkedList/CLinkedList/clinkedlist.h
+stdio.h
+-
+stdlib.h
+-
+error.h
+/Users/tomaspetricek/Programming/Languages/Cpp/courses/udemy/MasteringDataStructuresAndAlgorithms/LinkedList/CLinkedList/error.h
+
+/Users/tomaspetricek/Programming/Languages/Cpp/courses/udemy/MasteringDataStructuresAndAlgorithms/LinkedList/CLinkedList/error.h
+string.h
+-
+
+/Users/tomaspetricek/Programming/Languages/Cpp/courses/udemy/MasteringDataStructuresAndAlgorithms/LinkedList/CLinkedList/main.c
+stdio.h
+-
+clinkedlist.h
+/Users/tomaspetricek/Programming/Languages/Cpp/courses/udemy/MasteringDataStructuresAndAlgorithms/LinkedList/CLinkedList/clinkedlist.h
+
