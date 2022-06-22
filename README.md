@@ -1,6 +1,6 @@
 # CLinkedList
 - it shows an implementation of a linked list data structure in **C**
-- linked list is created by channing nodes represented as struct **Node**
+- linked list is created by channing nodes represented as struct **SingleLinkNode**
 - struct can be manipulated using dedicated functions that start with name _Node__...
 - since there are no exceptions in C, functions return error codes, which need to be checked
 - there are no templates in C, so the only type of data it can store is integer
