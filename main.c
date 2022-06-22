@@ -72,6 +72,16 @@ int main()
         log_error("Cannot check if list contains value:", err);
     }
 
+    int size;
+    err = Node_size(head, &size);
+
+    if (!err) {
+        printf("Linked list size is: %d", size);
+    }
+    else {
+        log_error("Cannot determine size of the list", err);
+    }
+
     // free
     Node_free(&head);
     return 0;

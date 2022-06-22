@@ -47,6 +47,28 @@ void Node_free(struct Node** head)
     *head = NULL;
 }
 
+// description:
+// - counts number of nodes in the linked list
+// - result of the function is passed using size parameter of the function
+// - returns code:
+//    - NULL_POINTER - if pointer to head node has value NULL
+//    - EXIT_SUCCESS - if size of the linked list was determined successfully
+// time complexity: O(n)
+int Node_size(struct Node* head, int* size)
+{
+    if (!head) return NULL_POINTER;
+
+    struct Node* curr = head;
+    *size = 0;
+
+    while (curr) {
+        (*size)++;
+        curr = curr->next;
+    }
+
+    return EXIT_SUCCESS;
+}
+
 // description: prints out value of each node in the linked list
 // time complexity: O(n), where n is the size of the linked list
 void Node_display(struct Node* node)
