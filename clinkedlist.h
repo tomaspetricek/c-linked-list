@@ -275,4 +275,27 @@ int Node_contains(struct Node* head, int val, bool* contains)
     return EXIT_SUCCESS;
 }
 
+// description:
+// - find maximum value stored in the linked list
+// - result is passed using max parameter of the function
+// - returns code:
+//    - NULL_POINTER - if pointer to head node has value NULL
+//    - EXIT_SUCCESS - if max value stored in the linked list was determined successfully
+// time complexity: O(n)
+int Node_max(struct Node* head, int* max) {
+    if (!head) return NULL_POINTER;
+
+    *max = head->data;
+    struct Node* curr = head->next;
+
+    while(curr) {
+        if (*max < curr->data)
+            *max = curr->data;
+
+        curr = curr->next;
+    }
+
+    return EXIT_SUCCESS;
+}
+
 #endif //CCODE_CLINKEDLIST_H

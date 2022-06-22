@@ -94,6 +94,16 @@ int main()
         log_error("Cannot determine sum of values stored in the linked list", err);
     }
 
+    // max
+    int max;
+    err = Node_max(head, &max);
+
+    if (!err) {
+        printf("Max: %d", max);
+    } else {
+        log_error("Cannot determine maximum value stored in the linked list", err);
+    }
+
     // free
     Node_free(&head);
     return 0;
