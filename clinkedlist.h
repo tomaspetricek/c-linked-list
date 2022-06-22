@@ -59,9 +59,9 @@ int Node_size(struct Node* head, int* size)
     if (!head) return NULL_POINTER;
 
     struct Node* curr = head;
-    *size = 0;
+    *size = 1;
 
-    while (curr) {
+    while (curr->next) {
         (*size)++;
         curr = curr->next;
     }
