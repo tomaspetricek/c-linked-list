@@ -49,7 +49,7 @@ void Node_free(struct Node** head)
 
 // description:
 // - counts number of nodes in the linked list
-// - result of the function is passed using size parameter of the function
+// - result is passed using size parameter of the function
 // - returns code:
 //    - NULL_POINTER - if pointer to head node has value NULL
 //    - EXIT_SUCCESS - if size of the linked list was determined successfully
@@ -63,6 +63,27 @@ int Node_size(struct Node* head, int* size)
 
     while (curr->next) {
         (*size)++;
+        curr = curr->next;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+// description:
+// - determines sum of all values stored inside a linked list
+// - result is passed using parameter sum of the function
+// - returns code:
+//    - NULL_POINTER - if pointer to head node has value NULL
+//    - EXIT_SUCCESS - if sum of the values stored in linked list was determined successfully
+// time complexity: O(n)
+int Node_sum(struct Node* head, int *sum) {
+    if (!head) return NULL_POINTER;
+
+    struct Node* curr = head;
+    *sum = 0;
+
+    while (curr) {
+        (*sum)+=curr->data;
         curr = curr->next;
     }
 
