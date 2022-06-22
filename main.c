@@ -72,14 +72,26 @@ int main()
         log_error("Cannot check if list contains value:", err);
     }
 
+    // size
     int size;
     err = Node_size(head, &size);
 
     if (!err) {
-        printf("Linked list size is: %d", size);
+        printf("Size: %d\n", size);
     }
     else {
         log_error("Cannot determine size of the list", err);
+    }
+
+    // sum
+    int sum;
+    err = Node_sum(head, &sum);
+
+    if (!err) {
+        printf("Sum: %d\n", sum);
+    }
+    else {
+        log_error("Cannot determine sum of values stored in the linked list", err);
     }
 
     // free
