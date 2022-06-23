@@ -386,7 +386,7 @@ void SinglyLinkedList_sorted_remove_duplicates(struct SinglyLinkedList* list)
     }
 }
 
-// description: reverses order of nodes inside the link list
+// description: reverses order of nodes inside the linked list
 // time complexity: O(n), where n is the size of the linked list
 void SinglyLinkedList_reverse(struct SinglyLinkedList* list)
 {
@@ -404,6 +404,31 @@ void SinglyLinkedList_reverse(struct SinglyLinkedList* list)
     }
 
     list->head = head;
+}
+
+// description:
+// - moves all nodes from the source to the destination linked list
+// - all nodes from the source linked get appended after the last node of the destination linked list
+// time complexity: O(n), where n is the size of the source list
+void SinglyLinkedList_concatenate(struct SinglyLinkedList* dest, struct SinglyLinkedList* src) {
+    // source is empty
+    if (src->size==0) return;
+
+    // dest is empty
+    if (dest->size==0) {
+        dest->size = src->size;
+        dest->head = src->head;
+        src->head = NULL;
+        src->size = 0;
+    }
+
+    struct SingleLinkNode* curr = src->head;
+
+    // move all nodes from source to destination
+    for(;curr;curr = curr->next)
+        SinglyLinkedList_append(dest, curr->data);
+
+    src->size = 0;
 }
 
 #endif //CCODE_CLINKEDLIST_H

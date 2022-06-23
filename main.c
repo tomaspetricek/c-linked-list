@@ -154,6 +154,11 @@ int main()
     printf("Reversed:\n");
     SinglyLinkedList_display(&list3);
 
+    // concatenate
+    SinglyLinkedList_concatenate(&sorted_list, &list3);
+    printf("Concatenate:\n");
+    SinglyLinkedList_display(&sorted_list);
+
     // free
     SinglyLinkedList_free(&list3);
     SinglyLinkedList_free(&sorted_list);
