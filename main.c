@@ -100,12 +100,39 @@ int main()
     err = SinglyLinkedList_max(&list, &max);
 
     if (!err) {
-        printf("Max: %d", max);
-    } else {
+        printf("Max: %d\n", max);
+    }
+    else {
         log_error("Cannot determine maximum value stored in the linked list", err);
     }
 
+    // create
+    struct SinglyLinkedList sorted_list;
+    int sorted_vals[] = {3, 7, 9, 15, 20};
+    size = 5;
+    err = SinglyLinkedList_create(&sorted_list, sorted_vals, size);
+
+    if (!err) {
+        printf("Sorted list:\n");
+        SinglyLinkedList_display(&sorted_list);
+    }
+    else {
+        log_error("Cannot create linked list", err);
+    }
+
+    // sorted insert
+    err = SinglyLinkedList_sorted_insert(&sorted_list, 10);
+
+    if (!err) {
+        printf("Sorted insert:\n");
+        SinglyLinkedList_display(&sorted_list);
+    }
+    else {
+        log_error("Cannot insert into sorted linked list", err);
+    }
+
     // free
+    SinglyLinkedList_free(&sorted_list);
     SinglyLinkedList_free(&list);
     return 0;
 }

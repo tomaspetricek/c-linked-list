@@ -44,7 +44,8 @@ void SingleLinkNode_free(struct SingleLinkNode** node)
     *node = NULL;
 }
 
-void SinglyLinkedList_free(struct SinglyLinkedList* list) {
+void SinglyLinkedList_free(struct SinglyLinkedList* list)
+{
     struct SingleLinkNode* curr = list->head;
     struct SingleLinkNode* dealloc = NULL;
 
@@ -85,8 +86,9 @@ int SinglyLinkedList_append(struct SinglyLinkedList* list, int val)
     return EXIT_SUCCESS;
 }
 
-int SinglyLinkedList_create(struct SinglyLinkedList* list, int* arr, int size) {
-    if (size < 1) return INVALID_ARGUMENT;
+int SinglyLinkedList_create(struct SinglyLinkedList* list, int* arr, int size)
+{
+    if (size<1) return INVALID_ARGUMENT;
 
     list->size = 1;
     int err;
@@ -101,7 +103,7 @@ int SinglyLinkedList_create(struct SinglyLinkedList* list, int* arr, int size) {
 
     list->head = curr;
 
-    for (int i = 1; i < size;i++) {
+    for (int i = 1; i<size; i++) {
         err = SinglyLinkedList_append(list, arr[i]);
 
         if (err) {
@@ -132,14 +134,15 @@ int SinglyLinkedList_size(struct SinglyLinkedList* list, int* size)
 //    - EMPTY - if linked list is empty
 //    - EXIT_SUCCESS - if sum of the values stored in linked list was determined successfully
 // time complexity: O(n)
-int SinglyLinkedList_sum(struct SinglyLinkedList* list, int *sum) {
+int SinglyLinkedList_sum(struct SinglyLinkedList* list, int* sum)
+{
     if (list->size==0) return EMPTY;
 
     struct SingleLinkNode* curr = list->head;
     *sum = 0;
 
     while (curr) {
-        (*sum)+=curr->data;
+        (*sum) += curr->data;
         curr = curr->next;
     }
 
@@ -167,7 +170,7 @@ void SinglyLinkedList_display(struct SinglyLinkedList* list)
 // time complexity: O(n), where n is the size of the linked list
 int SinglyLinkedList_get(struct SinglyLinkedList* list, int idx, int* val)
 {
-    if (idx<0 || idx > list->size-1) return INDEX_OUT_OF_BOUNDS;
+    if (idx<0 || idx>list->size-1) return INDEX_OUT_OF_BOUNDS;
     if (list->size==0) return EMPTY;
 
     struct SingleLinkNode* curr = list->head;
@@ -193,7 +196,7 @@ int SinglyLinkedList_get(struct SinglyLinkedList* list, int idx, int* val)
 // time complexity: 0(n), where n is the size of the linked list
 int SinglyLinkedList_insert(struct SinglyLinkedList* list, int idx, int val)
 {
-    if (idx<0 || idx > list->size-1) return INDEX_OUT_OF_BOUNDS;
+    if (idx<0 || idx>list->size-1) return INDEX_OUT_OF_BOUNDS;
     if (list->size==0) return EMPTY;
 
     int err;
@@ -311,20 +314,67 @@ int SinglyLinkedList_contains(struct SinglyLinkedList* list, int val, bool* cont
 // - returns code:
 //    - EMPTY - if linked list is empty
 //    - EXIT_SUCCESS - if max value stored in the linked list was determined successfully
-// time complexity: O(n)
-int SinglyLinkedList_max(struct SinglyLinkedList* list, int* max) {
+// time complexity: O(n), where n is the size of the linked list
+int SinglyLinkedList_max(struct SinglyLinkedList* list, int* max)
+{
     if (list->size==0) return EMPTY;
 
     *max = list->head->data;
     struct SingleLinkNode* curr = list->head->next;
 
-    while(curr) {
-        if (*max < curr->data)
+    while (curr) {
+        if (*max<curr->data)
             *max = curr->data;
 
         curr = curr->next;
     }
 
+    return EXIT_SUCCESS;
+}
+
+// description:
+// - inserts value in the linked list
+// - linked list has to be sorted in ascending way
+//    - EMPTY - if linked list is empty
+//    - EXIT_SUCCESS - if value was inserted successfully
+// time complexity: O(n), where n is the size of the linked list
+int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
+{
+    if (list->size==0) return EMPTY;
+
+    struct SingleLinkNode* curr = list->head;
+
+    // create new node
+    struct SingleLinkNode* node;
+    int err = SingleLinkNode_create(&node, val, NULL);
+
+    if (err) {
+        log_error("Cannot create node", err);
+        return EXIT_FAILURE;
+    }
+
+    // increase list size
+    list->size++;
+
+    // insert as head
+    if (curr->data>val) {
+        node->next = list->head;
+        list->head = node;
+        return EXIT_SUCCESS;
+    }
+
+    // insert in between
+    while (curr->next) {
+        if (curr->next->data>val) {
+            node->next = curr->next;
+            curr->next = node;
+            return EXIT_SUCCESS;
+        }
+        curr = curr->next;
+    }
+
+    // insert as tail
+    curr->next = node;
     return EXIT_SUCCESS;
 }
 
