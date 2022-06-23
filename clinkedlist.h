@@ -16,9 +16,14 @@ struct SingleLinkNode {
     struct SingleLinkNode* next;
 };
 
+struct SinglyLinkedList {
+    struct SingleLinkNode* head;
+    int size;
+};
+
 // description: creates a node with given value on the heap
 // time complexity: O(1)
-int SinglyLinkedList_create(struct SingleLinkNode** node, int val, struct SingleLinkNode* next)
+int SingleLinkNode_create(struct SingleLinkNode** node, int val, struct SingleLinkNode* next)
 {
     if (node==NULL) return NULL_POINTER;
 
@@ -33,39 +38,90 @@ int SinglyLinkedList_create(struct SingleLinkNode** node, int val, struct Single
 
 // description: releases heap memory of each node of the linked list
 // time complexity: O(n), where n is the size of the linked list
-void SinglyLinkedList_free(struct SingleLinkNode** head)
+void SingleLinkNode_free(struct SingleLinkNode** node)
 {
-    struct SingleLinkNode* curr = *head;
+    free(*node);
+    *node = NULL;
+}
+
+void SinglyLinkedList_free(struct SinglyLinkedList* list) {
+    struct SingleLinkNode* curr = list->head;
     struct SingleLinkNode* dealloc = NULL;
 
     while (curr) {
         dealloc = curr;
         curr = curr->next;
-        free(dealloc);
+        SingleLinkNode_free(&dealloc);
     }
-
-    *head = NULL;
 }
 
 // description:
-// - counts number of nodes in the linked list
-// - result is passed using size parameter of the function
+// - places a node with given value at the end of the linked list
 // - returns code:
-//    - NULL_POINTER - if pointer to head node has value NULL
-//    - EXIT_SUCCESS - if size of the linked list was determined successfully
-// time complexity: O(n)
-int SinglyLinkedList_size(struct SingleLinkNode* head, int* size)
+//    - EMPTY - if linked list is empty
+//    - EXIT_FAILURE - if the new node cannot be created
+//    - EXIT_SUCCESS - if new node was successfully appended to the linked list
+// time complexity: O(n), where n is the size of the linked list
+int SinglyLinkedList_append(struct SinglyLinkedList* list, int val)
 {
-    if (!head) return NULL_POINTER;
+    if (list->size==0) return EMPTY;
 
-    struct SingleLinkNode* curr = head;
-    *size = 1;
+    // get to the end
+    struct SingleLinkNode* curr = list->head;
+    while (curr->next) curr = curr->next;
 
-    while (curr->next) {
-        (*size)++;
-        curr = curr->next;
+    // create last node
+    struct SingleLinkNode* last = NULL;
+    int err = SingleLinkNode_create(&last, val, NULL);
+
+    if (err) {
+        log_error("Cannot create node", err);
+        return EXIT_FAILURE;
     }
 
+    // append
+    curr->next = last;
+    list->size++;
+    return EXIT_SUCCESS;
+}
+
+int SinglyLinkedList_create(struct SinglyLinkedList* list, int* arr, int size) {
+    if (size < 1) return INVALID_ARGUMENT;
+
+    list->size = 1;
+    int err;
+    struct SingleLinkNode* curr = NULL;
+
+    err = SingleLinkNode_create(&curr, arr[0], NULL);
+
+    if (err) {
+        log_error("Cannot create node", err);
+        return EXIT_FAILURE;
+    }
+
+    list->head = curr;
+
+    for (int i = 1; i < size;i++) {
+        err = SinglyLinkedList_append(list, arr[i]);
+
+        if (err) {
+            log_error("Cannot append node", err);
+            return EXIT_FAILURE;
+        }
+    }
+
+    return EXIT_SUCCESS;
+}
+
+// description:
+// - retrieves size of the linked list
+// - result is passed using size parameter of the function
+// - returns code:
+//    - EXIT_SUCCESS - if size of the linked list was determined successfully
+// time complexity: O(1)
+int SinglyLinkedList_size(struct SinglyLinkedList* list, int* size)
+{
+    *size = list->size;
     return EXIT_SUCCESS;
 }
 
@@ -73,13 +129,13 @@ int SinglyLinkedList_size(struct SingleLinkNode* head, int* size)
 // - determines sum of all values stored inside a linked list
 // - result is passed using parameter sum of the function
 // - returns code:
-//    - NULL_POINTER - if pointer to head node has value NULL
+//    - EMPTY - if linked list is empty
 //    - EXIT_SUCCESS - if sum of the values stored in linked list was determined successfully
 // time complexity: O(n)
-int SinglyLinkedList_sum(struct SingleLinkNode* head, int *sum) {
-    if (!head) return NULL_POINTER;
+int SinglyLinkedList_sum(struct SinglyLinkedList* list, int *sum) {
+    if (list->size==0) return EMPTY;
 
-    struct SingleLinkNode* curr = head;
+    struct SingleLinkNode* curr = list->head;
     *sum = 0;
 
     while (curr) {
@@ -92,9 +148,11 @@ int SinglyLinkedList_sum(struct SingleLinkNode* head, int *sum) {
 
 // description: prints out value of each node in the linked list
 // time complexity: O(n), where n is the size of the linked list
-void SinglyLinkedList_display(struct SingleLinkNode* node)
+void SinglyLinkedList_display(struct SinglyLinkedList* list)
 {
-    struct SingleLinkNode* curr = node;
+    if (list->size==0) return;
+
+    struct SingleLinkNode* curr = list->head;
 
     while (curr->next) {
         printf("%d, ", curr->data);
@@ -107,12 +165,12 @@ void SinglyLinkedList_display(struct SingleLinkNode* node)
 // - returns value of a node at given index
 // - value at the index is passed using val parameter of the function
 // time complexity: O(n), where n is the size of the linked list
-int SinglyLinkedList_get(struct SingleLinkNode* head, int idx, int* val)
+int SinglyLinkedList_get(struct SinglyLinkedList* list, int idx, int* val)
 {
-    if (idx<0) return INDEX_OUT_OF_BOUNDS;
-    if (head==NULL) return NULL_POINTER;
+    if (idx<0 || idx > list->size-1) return INDEX_OUT_OF_BOUNDS;
+    if (list->size==0) return EMPTY;
 
-    struct SingleLinkNode* curr = head;
+    struct SingleLinkNode* curr = list->head;
 
     for (int i = 0; curr; i++) {
         if (i==idx) {
@@ -126,72 +184,42 @@ int SinglyLinkedList_get(struct SingleLinkNode* head, int idx, int* val)
 }
 
 // description:
-// - places a node with given value at the end of the linked list
-// - returns code:
-//    - NULL_POINTER - if pointer to the head node has value NULL
-//    - EXIT_FAILURE - if the new node cannot be created
-//    - EXIT_SUCCESS - if new node was successfully appended to the linked list
-// time complexity: O(n), where n is the size of the linked list
-int SinglyLinkedList_append(struct SingleLinkNode* head, int val)
-{
-    if (head==NULL) return NULL_POINTER;
-
-    // get to the end
-    struct SingleLinkNode* curr = head;
-    while (curr->next) curr = curr->next;
-
-    // create last node
-    struct SingleLinkNode* last = NULL;
-    int err = SinglyLinkedList_create(&last, val, NULL);
-
-    if (err) {
-        log_error("Cannot create node", err);
-        return EXIT_FAILURE;
-    }
-
-    // append
-    curr->next = last;
-
-    return EXIT_SUCCESS;
-}
-
-// description:
 // - places new node with the value at given index
 // - returns code:
 //    - INDEX_OUT_OF_BOUNDS - if index passed is lower than 0 or greater than size-1
-//    - NULL_POINTER - if pointer to the head pointer is NULL or head pointer itself is NULL
+//    - EMPTY - if linked list is empty
 //    - EXIT_FAILURE - if the new node cannot be created
 //    - EXIT_SUCCESS - if the value was successfully inserted
 // time complexity: 0(n), where n is the size of the linked list
-int SinglyLinkedList_insert(struct SingleLinkNode** head, int idx, int val)
+int SinglyLinkedList_insert(struct SinglyLinkedList* list, int idx, int val)
 {
-    if (idx<0) return INDEX_OUT_OF_BOUNDS;
-    if (head==NULL) return NULL_POINTER;
-    if (*head==NULL) return NULL_POINTER;
+    if (idx<0 || idx > list->size-1) return INDEX_OUT_OF_BOUNDS;
+    if (list->size==0) return EMPTY;
 
     int err;
-    struct SingleLinkNode* curr = *head;
+    struct SingleLinkNode* curr = list->head;
 
     // insert head
     if (idx==0) {
         struct SingleLinkNode* node = NULL;
-        err = SinglyLinkedList_create(&node, val, curr);
+        err = SingleLinkNode_create(&node, val, curr);
 
         if (err) {
             log_error("Cannot create node", err);
             return EXIT_FAILURE;
         }
 
-        *head = node;
+        list->head = node;
+        list->size++;
         return EXIT_SUCCESS;
     }
 
-    for (int i = 0; curr!=NULL; i++) {
+    for (int i = 0; curr; i++) {
 
         // insert node
         if (i+1==idx) {
             struct SingleLinkNode* node = NULL;
-            err = SinglyLinkedList_create(&node, val, curr->next);
+            err = SingleLinkNode_create(&node, val, curr->next);
 
             if (err) {
                 log_error("Cannot create node", err);
@@ -199,6 +227,7 @@ int SinglyLinkedList_insert(struct SingleLinkNode** head, int idx, int val)
             }
 
             curr->next = node;
+            list->size++;
             return EXIT_SUCCESS;
         }
         curr = curr->next;
@@ -211,25 +240,25 @@ int SinglyLinkedList_insert(struct SingleLinkNode** head, int idx, int val)
 // - removes node at the given index from the linked list
 // - returns code:
 //    - INDEX_OUT_OF_BOUNDS - if index passed is lower than 0 or greater than size-1
-//    - NULL_POINTER - if pointer to the head pointer node is NULL or head pointer itself is NULL
+//    - EMPTY - if linked list is empty
 //    - EXIT_SUCCESS - if node was successfully deleted
 // time complexity: O(n), where n is the size of the linked list
-int SinglyLinkedList_delete(struct SingleLinkNode** head, int idx)
+int SinglyLinkedList_delete(struct SinglyLinkedList* list, int idx)
 {
     if (idx<0) return INDEX_OUT_OF_BOUNDS;
-    if (head==NULL) return NULL_POINTER;
-    if (*head==NULL) return NULL_POINTER;
+    if (list->size==0) return EMPTY;
 
-    struct SingleLinkNode* curr = *head;
+    struct SingleLinkNode* curr = list->head;
     struct SingleLinkNode* remove = NULL;
 
     // delete head
     if (idx==0) {
-        remove = *head;
-        *head = curr->next;
+        remove = list->head;
+        list->head = curr->next;
         remove->next = NULL;
 
-        SinglyLinkedList_free(&remove);
+        SingleLinkNode_free(&remove);
+        list->size--;
         return EXIT_SUCCESS;
     }
 
@@ -241,7 +270,8 @@ int SinglyLinkedList_delete(struct SingleLinkNode** head, int idx)
             curr->next = remove->next;
             remove->next = NULL;
 
-            SinglyLinkedList_free(&remove);
+            SingleLinkNode_free(&remove);
+            list->size--;
             return EXIT_SUCCESS;
         }
         curr = curr->next;
@@ -254,15 +284,15 @@ int SinglyLinkedList_delete(struct SingleLinkNode** head, int idx)
 // - stores value true in parameter contains if the linked list contains given value, false otherwise
 // - result is passed using parameter contains of the function
 // - returns code:
-//    - NULL_POINTER - if pointer to the head node has value NULL
+//    - EMPTY - if linked list is empty
 //    - EXIT_SUCCESS - if function ran successfully
 // time complexity: O(n), where n is the size of the linked list
-int SinglyLinkedList_contains(struct SingleLinkNode* head, int val, bool* contains)
+int SinglyLinkedList_contains(struct SinglyLinkedList* list, int val, bool* contains)
 {
-    if (head==NULL) return NULL_POINTER;
+    if (list->size==0) return EMPTY;
 
     *contains = false;
-    struct SingleLinkNode* curr = head;
+    struct SingleLinkNode* curr = list->head;
 
     while (curr) {
         if (curr->data==val) {
@@ -279,14 +309,14 @@ int SinglyLinkedList_contains(struct SingleLinkNode* head, int val, bool* contai
 // - find maximum value stored in the linked list
 // - result is passed using max parameter of the function
 // - returns code:
-//    - NULL_POINTER - if pointer to head node has value NULL
+//    - EMPTY - if linked list is empty
 //    - EXIT_SUCCESS - if max value stored in the linked list was determined successfully
 // time complexity: O(n)
-int SinglyLinkedList_max(struct SingleLinkNode* head, int* max) {
-    if (!head) return NULL_POINTER;
+int SinglyLinkedList_max(struct SinglyLinkedList* list, int* max) {
+    if (list->size==0) return EMPTY;
 
-    *max = head->data;
-    struct SingleLinkNode* curr = head->next;
+    *max = list->head->data;
+    struct SingleLinkNode* curr = list->head->next;
 
     while(curr) {
         if (*max < curr->data)
