@@ -362,8 +362,8 @@ int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
     return EXIT_SUCCESS;
 }
 
-// description:
-// - removes duplicates from sorted linked list
+// description: removes duplicates from sorted linked list
+// time complexity: O(n)
 void SinglyLinkedList_sorted_remove_duplicates(struct SinglyLinkedList* list)
 {
     if (list->size<1) return;
