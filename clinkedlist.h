@@ -409,25 +409,27 @@ void SinglyLinkedList_reverse(struct SinglyLinkedList* list)
 // description:
 // - moves all nodes from the source to the destination linked list
 // - all nodes from the source linked get appended after the last node of the destination linked list
-// time complexity: O(n), where n is the size of the source list
+// time complexity: O(n), where n is the size of destination linked list
 void SinglyLinkedList_concatenate(struct SinglyLinkedList* dest, struct SinglyLinkedList* src) {
     // source is empty
     if (src->size==0) return;
 
     // dest is empty
     if (dest->size==0) {
-        dest->size = src->size;
         dest->head = src->head;
+        dest->size = src->size;
         src->head = NULL;
         src->size = 0;
     }
 
-    struct SingleLinkNode* curr = src->head;
+    // get to last node
+    struct SingleLinkNode* curr = dest->head;
+    while (curr->next) curr = curr->next;
 
-    // move all nodes from source to destination
-    for(;curr;curr = curr->next)
-        SinglyLinkedList_append(dest, curr->data);
-
+    // add all elements
+    curr->next = src->head;
+    dest->size += src->size;
+    src->head = NULL;
     src->size = 0;
 }
 

@@ -158,6 +158,7 @@ int main()
     SinglyLinkedList_concatenate(&sorted_list, &list3);
     printf("Concatenate:\n");
     SinglyLinkedList_display(&sorted_list);
+    SinglyLinkedList_display(&list3);
 
     // free
     SinglyLinkedList_free(&list3);
