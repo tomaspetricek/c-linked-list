@@ -180,15 +180,26 @@ int SinglyLinkedList_get(struct SinglyLinkedList* list, int idx, int* val)
     if (idx<0 || idx>list->size-1) return INDEX_OUT_OF_BOUNDS;
     if (list->size==0) return EMPTY;
 
-    struct SingleLinkNode* curr = list->head;
+    // node is head
+    if (idx==0) {
+        *val = list->head->data;
+        return EXIT_SUCCESS;
+    }
 
-    for (int i = 0; curr; i++, curr = curr->next)
+    // node is tail
+    if (idx==list->size-1) {
+        *val = list->tail->data;
+        return EXIT_SUCCESS;
+    }
+
+    // node is between
+    struct SingleLinkNode* curr = list->head->next;
+
+    for (int i = 1; curr; i++, curr = curr->next)
         if (i==idx) {
             *val = curr->data;
             return EXIT_SUCCESS;
         }
-
-    return INDEX_OUT_OF_BOUNDS;
 }
 
 // description:
@@ -402,6 +413,7 @@ void SinglyLinkedList_sorted_remove_duplicates(struct SinglyLinkedList* list)
         else {
             curr->next = next->next;
             SingleLinkNode_free(&next);
+            list->size--;
             next = curr->next;
         }
     }

@@ -52,7 +52,7 @@ int main()
 
     // get
     int val;
-    int idx = 1;
+    int idx = list.size-1;
     err = SinglyLinkedList_get(&list, idx, &val);
 
     if (!err) {
