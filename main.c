@@ -29,7 +29,7 @@ int main()
     }
 
     // insert
-    err = SinglyLinkedList_insert(&list, 0, 40);
+    err = SinglyLinkedList_insert(&list,0, 40);
 
     if (!err) {
         printf("Insert:\n");
