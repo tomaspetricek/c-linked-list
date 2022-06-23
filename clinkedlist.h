@@ -363,17 +363,12 @@ int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
         return EXIT_SUCCESS;
     }
 
-    // insert in between
-    while (curr->next) {
-        if (curr->next->data>val) {
-            node->next = curr->next;
-            curr->next = node;
-            return EXIT_SUCCESS;
-        }
+    // move to correct position
+    while (curr->next && curr->next->data<val)
         curr = curr->next;
-    }
 
-    // insert as tail
+    // insert
+    node->next = curr->next;
     curr->next = node;
     return EXIT_SUCCESS;
 }

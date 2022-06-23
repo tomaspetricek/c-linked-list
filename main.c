@@ -121,7 +121,7 @@ int main()
     }
 
     // sorted insert
-    err = SinglyLinkedList_sorted_insert(&sorted_list, 10);
+    err = SinglyLinkedList_sorted_insert(&sorted_list, 21);
 
     if (!err) {
         printf("Sorted insert:\n");
