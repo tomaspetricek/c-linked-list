@@ -131,7 +131,26 @@ int main()
         log_error("Cannot insert into sorted linked list", err);
     }
 
+    // sorted remove duplicates
+    struct SinglyLinkedList list3;
+    int vals3[] = {1, 1, 2, 3, 3, 3, 10, 10, 10, 11};
+    size = 10;
+    err = SinglyLinkedList_create(&list3, vals3, size);
+
+    if (!err) {
+        printf("Sorted list with duplicates\n");
+        SinglyLinkedList_display(&list3);
+    }
+    else {
+        log_error("Cannot create linked list", err);
+    }
+
+    SinglyLinkedList_sorted_remove_duplicates(&list3);
+    printf("Remove duplicates:\n");
+    SinglyLinkedList_display(&list3);
+
     // free
+    SinglyLinkedList_free(&list3);
     SinglyLinkedList_free(&sorted_list);
     SinglyLinkedList_free(&list);
     return 0;

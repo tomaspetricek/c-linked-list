@@ -141,10 +141,8 @@ int SinglyLinkedList_sum(struct SinglyLinkedList* list, int* sum)
     struct SingleLinkNode* curr = list->head;
     *sum = 0;
 
-    while (curr) {
+    for (; curr; curr = curr->next)
         (*sum) += curr->data;
-        curr = curr->next;
-    }
 
     return EXIT_SUCCESS;
 }
@@ -157,10 +155,8 @@ void SinglyLinkedList_display(struct SinglyLinkedList* list)
 
     struct SingleLinkNode* curr = list->head;
 
-    while (curr->next) {
+    for (; curr->next; curr = curr->next)
         printf("%d, ", curr->data);
-        curr = curr->next;
-    }
     printf("%d\n", curr->data);
 }
 
@@ -175,13 +171,11 @@ int SinglyLinkedList_get(struct SinglyLinkedList* list, int idx, int* val)
 
     struct SingleLinkNode* curr = list->head;
 
-    for (int i = 0; curr; i++) {
+    for (int i = 0; curr; i++, curr = curr->next)
         if (i==idx) {
             *val = curr->data;
             return EXIT_SUCCESS;
         }
-        curr = curr->next;
-    }
 
     return INDEX_OUT_OF_BOUNDS;
 }
@@ -217,7 +211,7 @@ int SinglyLinkedList_insert(struct SinglyLinkedList* list, int idx, int val)
         return EXIT_SUCCESS;
     }
 
-    for (int i = 0; curr; i++) {
+    for (int i = 0; curr; i++, curr = curr->next)
 
         // insert node
         if (i+1==idx) {
@@ -233,8 +227,6 @@ int SinglyLinkedList_insert(struct SinglyLinkedList* list, int idx, int val)
             list->size++;
             return EXIT_SUCCESS;
         }
-        curr = curr->next;
-    }
 
     return INDEX_OUT_OF_BOUNDS;
 }
@@ -265,7 +257,7 @@ int SinglyLinkedList_delete(struct SinglyLinkedList* list, int idx)
         return EXIT_SUCCESS;
     }
 
-    for (int i = 0; curr; i++) {
+    for (int i = 0; curr; i++, curr = curr->next) {
 
         // delete node
         if (i+1==idx) {
@@ -277,7 +269,6 @@ int SinglyLinkedList_delete(struct SinglyLinkedList* list, int idx)
             list->size--;
             return EXIT_SUCCESS;
         }
-        curr = curr->next;
     }
 
     return INDEX_OUT_OF_BOUNDS;
@@ -297,13 +288,11 @@ int SinglyLinkedList_contains(struct SinglyLinkedList* list, int val, bool* cont
     *contains = false;
     struct SingleLinkNode* curr = list->head;
 
-    while (curr) {
+    for (; curr; curr = curr->next)
         if (curr->data==val) {
             *contains = true;
             return EXIT_SUCCESS;
         }
-        curr = curr->next;
-    }
 
     return EXIT_SUCCESS;
 }
@@ -322,12 +311,9 @@ int SinglyLinkedList_max(struct SinglyLinkedList* list, int* max)
     *max = list->head->data;
     struct SingleLinkNode* curr = list->head->next;
 
-    while (curr) {
+    for (; curr; curr = curr->next)
         if (*max<curr->data)
             *max = curr->data;
-
-        curr = curr->next;
-    }
 
     return EXIT_SUCCESS;
 }
@@ -374,6 +360,26 @@ int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
     node->next = curr->next;
     curr->next = node;
     return EXIT_SUCCESS;
+}
+
+// description:
+// - removes duplicates from sorted linked list
+void SinglyLinkedList_sorted_remove_duplicates(struct SinglyLinkedList* list)
+{
+    if (list->size<1) return;
+
+    struct SingleLinkNode* curr = list->head;
+    struct SingleLinkNode* remove = NULL;
+
+    for (; curr->next; curr = curr->next)
+
+        // remove all consecutive duplicates
+        while (curr->data==curr->next->data && curr->next) {
+            remove = curr->next;
+            curr->next = curr->next->next;
+            SingleLinkNode_free(&remove);
+            list->size--;
+        }
 }
 
 #endif //CCODE_CLINKEDLIST_H
