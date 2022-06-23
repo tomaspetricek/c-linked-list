@@ -364,7 +364,7 @@ int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
 }
 
 // description: removes duplicates from sorted linked list
-// time complexity: O(n)
+// time complexity: O(n), where n is the size of the linked list
 void SinglyLinkedList_sorted_remove_duplicates(struct SinglyLinkedList* list)
 {
     if (list->size<1) return;
@@ -377,13 +377,33 @@ void SinglyLinkedList_sorted_remove_duplicates(struct SinglyLinkedList* list)
             curr = next;
             next = next->next;
         }
-        // remove duplicate
+            // remove duplicate
         else {
             curr->next = next->next;
             SingleLinkNode_free(&next);
             next = curr->next;
         }
     }
+}
+
+// description: reverses order of nodes inside the link list
+// time complexity: O(n), where n is the size of the linked list
+void SinglyLinkedList_reverse(struct SinglyLinkedList* list)
+{
+    if (list->size<1) return;
+
+    struct SingleLinkNode* curr = list->head;
+    struct SingleLinkNode* temp = NULL;
+    struct SingleLinkNode* head = NULL;
+
+    while (curr) {
+        temp = head;
+        head = curr;
+        curr = curr->next;
+        head->next = temp;
+    }
+
+    list->head = head;
 }
 
 #endif //CCODE_CLINKEDLIST_H

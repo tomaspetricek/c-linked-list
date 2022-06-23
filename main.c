@@ -149,6 +149,11 @@ int main()
     printf("Remove duplicates:\n");
     SinglyLinkedList_display(&list3);
 
+    // reverse
+    SinglyLinkedList_reverse(&list3);
+    printf("Reversed:\n");
+    SinglyLinkedList_display(&list3);
+
     // free
     SinglyLinkedList_free(&list3);
     SinglyLinkedList_free(&sorted_list);
