@@ -335,15 +335,10 @@ int SinglyLinkedList_max(struct SinglyLinkedList* list, int* max)
 // description:
 // - inserts value in the linked list
 // - linked list has to be sorted in ascending way
-//    - EMPTY - if linked list is empty
 //    - EXIT_SUCCESS - if value was inserted successfully
 // time complexity: O(n), where n is the size of the linked list
 int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
 {
-    if (list->size==0) return EMPTY;
-
-    struct SingleLinkNode* curr = list->head;
-
     // create new node
     struct SingleLinkNode* node;
     int err = SingleLinkNode_create(&node, val, NULL);
@@ -355,6 +350,14 @@ int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
 
     // increase list size
     list->size++;
+
+    // empty list
+    if (list->size==1) {
+        list->head = node;
+        return EXIT_SUCCESS;
+    }
+
+    struct SingleLinkNode* curr = list->head;
 
     // insert as head
     if (curr->data>val) {
