@@ -459,6 +459,7 @@ void SinglyLinkedList_concatenate(struct SinglyLinkedList* dest, struct SinglyLi
         src->size = 0;
         src->head = NULL;
         src->tail = NULL;
+        return;
     }
 
     // add all elements
