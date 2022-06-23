@@ -322,6 +322,7 @@ int SinglyLinkedList_max(struct SinglyLinkedList* list, int* max)
 // - inserts value in the linked list
 // - linked list has to be sorted in ascending way
 //    - EXIT_SUCCESS - if value was inserted successfully
+//    - EXIT_FAILURE - cannot create node to be inserted in the linked list
 // time complexity: O(n), where n is the size of the linked list
 int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
 {
