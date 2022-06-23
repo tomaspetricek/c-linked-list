@@ -321,8 +321,8 @@ int SinglyLinkedList_max(struct SinglyLinkedList* list, int* max)
 // description:
 // - inserts value in the linked list
 // - linked list has to be sorted in ascending way
-//    - EXIT_SUCCESS - if value was inserted successfully
 //    - EXIT_FAILURE - cannot create node to be inserted in the linked list
+//    - EXIT_SUCCESS - if value was inserted successfully
 // time complexity: O(n), where n is the size of the linked list
 int SinglyLinkedList_sorted_insert(struct SinglyLinkedList* list, int val)
 {
@@ -370,17 +370,20 @@ void SinglyLinkedList_sorted_remove_duplicates(struct SinglyLinkedList* list)
     if (list->size<1) return;
 
     struct SingleLinkNode* curr = list->head;
-    struct SingleLinkNode* remove = NULL;
+    struct SingleLinkNode* next = list->head->next;
 
-    for (; curr->next; curr = curr->next)
-
-        // remove all consecutive duplicates
-        while (curr->data==curr->next->data && curr->next) {
-            remove = curr->next;
-            curr->next = curr->next->next;
-            SingleLinkNode_free(&remove);
-            list->size--;
+    while (next) {
+        if (curr->data!=next->data) {
+            curr = next;
+            next = next->next;
         }
+        // remove duplicate
+        else {
+            curr->next = next->next;
+            SingleLinkNode_free(&next);
+            next = curr->next;
+        }
+    }
 }
 
 #endif //CCODE_CLINKEDLIST_H
